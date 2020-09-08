@@ -1,0 +1,38 @@
+FROM {{ basecontainer }} as base
+
+# Get latest tools
+RUN apt update
+RUN apt-get install software-properties-common git sqlite3 -y
+
+# Install Python
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt install python3.8 python3-pip -y
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
+
+# Install Gradle
+RUN apt install gradle maven -y
+
+# Install spiderlab tools
+WORKDIR /usr/bin/primitive-hamcrest
+RUN git clone https://github.com/spideruci/primitive-hamcrest.git .
+RUN mvn install -DskipITs -Dmaven.test.skip=true
+
+WORKDIR /usr/bin/tacoco
+RUN git clone https://github.com/spideruci/tacoco.git .
+RUN mvn install -DskipITs -Dmaven.test.skip=true
+
+
+WORKDIR /usr/bin/history-slicer
+RUN git clone https://github.com/kajdreef/method-history-slicer.git .
+RUN ./gradlew build -x test
+
+WORKDIR /usr/bin/spidertools
+RUN git clone https://github.com/kajdreef/spidertools.git .
+RUN pip3 install -e .
+
+WORKDIR /home/spiderlab/
+RUN touch .spider.yml
+RUN mkdir /home/spiderlab/data/ && mkdir /home/spiderlab/data/intermediate/
+RUN echo "analysis:\n    TACOCO_HOME: /usr/bin/tacoco\n    HISTORY_SLICER_HOME: /usr/bin/history-slicer\n    OUTPUT_DIR: /home/spiderlab/data/intermediate\n    DB_LOCATION: /home/spiderlab/data/research.sqlite" > .spider.yml
+
+CMD ["/bin/bash"]

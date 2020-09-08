@@ -1,0 +1,11 @@
+{
+    "spider-jdk-13": {
+        "basecontainer": "adoptopenjdk/openjdk13:slim"
+    },
+    "spider-jdk-11": {
+        "basecontainer":"adoptopenjdk/openjdk11:slim"
+    },
+    "spider-jdk-8": {
+        "basecontainer": "adoptopenjdk/openjdk8:slim"
+    }
+}

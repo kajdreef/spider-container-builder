@@ -1,0 +1,5 @@
+analysis:
+    TACOCO_HOME: /usr/bin/tacoco
+    HISTORY_SLICER_HOME: /usr/bin/history-slicer
+    OUTPUT_DIR: /home/spiderlab/data/intermediate
+    DB_LOCATION: /home/spiderlab/data/db/
