@@ -4,6 +4,7 @@ import docker
 from io import BytesIO
 import logging
 import sys
+import argparse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -24,7 +25,15 @@ def create_dockerfile(config):
 
     return result
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Build docker containers containing spiderlab developed tools")
+    parser.add_argument('--force',  action='store_true', help="Force rebuild the containers")
+    
+    return parser.parse_args()
+
 def main():
+    args = parse_arguments()
+
     # Connect to docker deamon.
     try:
         client = docker.from_env()
@@ -41,4 +50,4 @@ def main():
     for docker_file_name, config in config_dict.items():
         logger.info("Create docker image for: %s", docker_file_name)
         dockerfile = create_dockerfile(config)
-        client.images.build(fileobj=dockerfile, tag=docker_file_name, quiet=False)
+        client.images.build(fileobj=dockerfile, tag=docker_file_name, quiet=False, nocache=args.force)
