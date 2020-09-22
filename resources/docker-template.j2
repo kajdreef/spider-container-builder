@@ -31,7 +31,7 @@ RUN pip3 install -e .
 
 WORKDIR /home/spiderlab/
 RUN touch .spider.yml
-RUN mkdir /home/spiderlab/data/ && mkdir /home/spiderlab/data/intermediate/
+RUN mkdir /home/spiderlab/data/ /home/spiderlab/data/intermediate/
 RUN echo "analysis:\n    TACOCO_HOME: /usr/bin/tacoco\n    HISTORY_SLICER_HOME: /usr/bin/history-slicer\n    OUTPUT_DIR: /home/spiderlab/data/intermediate\n    DB_LOCATION: /home/spiderlab/data/research.sqlite" > .spider.yml
 
 CMD ["/bin/bash"]
